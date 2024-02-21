@@ -1,5 +1,5 @@
 name: LostaR
-version: '0.4.1'
+version: '0.4.3'
 main: org.enteras.project_lostar.DungPlugin
 api-version: '1.20'
 commands:

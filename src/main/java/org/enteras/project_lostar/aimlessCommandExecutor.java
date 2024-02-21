@@ -1,19 +1,32 @@
 package org.enteras.project_lostar;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
-    private boolean isHidePlayerListEnabled = false;
-    private boolean isDeathMessageEnabled = false;
-    private boolean isEmoteEnabled = false;
+
+    private final Plugin plugin;
+    private final aimlessHidePlayerList listener;
+
+    // 첫 번째 생성자
+    public aimlessCommandExecutor(Plugin plugin) {
+        this.plugin = plugin;
+        this.listener = new aimlessHidePlayerList(); // aimlessHidePlayerList 인스턴스 생성
+    }
+
+    // 두 번째 생성자
+    public aimlessCommandExecutor(Plugin plugin, aimlessHidePlayerList listener) {
+        this.plugin = plugin;
+        this.listener = listener;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -43,28 +56,18 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
     private void enableFeature(CommandSender sender, String subCommand) {
         switch (subCommand) {
             case "hideplayerlist":
-                isHidePlayerListEnabled = true;
-                sender.sendMessage(ChatColor.GREEN + "aimlessPlayerList가 활성화되었습니다.");
-                if (isHidePlayerListEnabled) {
-                    // aimlessHidePlayerList 리스너를 등록합니다.
-                    Bukkit.getPluginManager().registerEvents(new aimlessHidePlayerList(), DungPlugin.getPlugin(DungPlugin.class));
-                }
+                sender.sendMessage(ChatColor.GREEN + "aimlessHidePlayerList가 활성화되었습니다.");
+                Bukkit.getPluginManager().registerEvents(listener, plugin);
                 break;
             case "deathmessage":
-                isDeathMessageEnabled = true;
                 sender.sendMessage(ChatColor.GREEN + "aimlessDeathMessage가 활성화되었습니다.");
-                if (isDeathMessageEnabled) {
-                    // aimlessDeathMessage 리스너를 등록합니다.
-                    Bukkit.getPluginManager().registerEvents(new aimlessDeathMessage(), DungPlugin.getPlugin(DungPlugin.class));
-                }
+                // aimlessDeathMessage 리스너 등록
+                Bukkit.getPluginManager().registerEvents(new aimlessDeathMessage(), DungPlugin.getPlugin(DungPlugin.class));
                 break;
             case "emote":
-                isEmoteEnabled = true;
                 sender.sendMessage(ChatColor.GREEN + "Emote가 활성화되었습니다.");
-                if (isEmoteEnabled) {
-                    // aimlessEmote 리스너를 등록합니다.
-                    Bukkit.getPluginManager().registerEvents(new aimlessEmote(), DungPlugin.getPlugin(DungPlugin.class));
-                }
+                // aimlessEmote 리스너 등록
+                Bukkit.getPluginManager().registerEvents(new aimlessEmote(), DungPlugin.getPlugin(DungPlugin.class));
                 break;
             default:
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
@@ -75,15 +78,12 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
     private void disableFeature(CommandSender sender, String subCommand) {
         switch (subCommand) {
             case "hideplayerlist":
-                isHidePlayerListEnabled = false;
                 sender.sendMessage(ChatColor.GREEN + "aimlessPlayerList가 비활성화되었습니다.");
                 break;
             case "deathmessage":
-                isDeathMessageEnabled = false;
                 sender.sendMessage(ChatColor.GREEN + "aimlessDeathMessage가 비활성화되었습니다.");
                 break;
             case "emote":
-                isEmoteEnabled = false;
                 sender.sendMessage(ChatColor.GREEN + "Emote가 비활성화되었습니다.");
                 break;
             default:

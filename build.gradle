@@ -21,6 +21,9 @@ repositories {
         url "https://repo.dmulloy2.net/nexus/repository/public/"
     }
     maven {
+        url "https://repo.dmulloy2.net/repository/public/"
+    }
+    maven {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
@@ -31,6 +34,7 @@ dependencies {
     implementation "junit:junit:4.12"
     implementation "com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT"
     implementation "com.comphenix.protocol:ProtocolLib:4.5.1"
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0'
 }
 
 tasks.withType(JavaCompile).configureEach {

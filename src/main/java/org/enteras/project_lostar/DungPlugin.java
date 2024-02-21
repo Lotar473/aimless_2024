@@ -11,6 +11,7 @@ public class DungPlugin extends JavaPlugin {
 
     private InventoryChangePlugin inventoryChangePlugin;
     private ChestBombCommandExecutor chestBombCommandExecutor;
+    private aimlessHidePlayerList aimlessHidePlayerList;
 
     @Override
     public void onEnable() {
@@ -18,6 +19,7 @@ public class DungPlugin extends JavaPlugin {
 
         this.inventoryChangePlugin = new InventoryChangePlugin(this);
         this.chestBombCommandExecutor = new ChestBombCommandExecutor(this);
+        this.aimlessHidePlayerList = new aimlessHidePlayerList(); // 추가: aimlessHidePlayerList 인스턴스 생성
 
         getCommand("dung").setExecutor(new DungCommandExecutor());
         getCommand("mondstadt").setExecutor(new MondstadtCommandExecutor());
@@ -27,20 +29,15 @@ public class DungPlugin extends JavaPlugin {
         getCommand("autoc").setExecutor(new AutocCommandExecutor());
         getCommand("soonbo").setExecutor(new SoonboCommandExecutor(this));
         getCommand("chestbomb").setExecutor(chestBombCommandExecutor);
-        getCommand("aimless").setExecutor(new aimlessCommandExecutor());
+        getCommand("aimless").setExecutor(new aimlessCommandExecutor(this));
         getServer().getPluginManager().registerEvents(new aimlessEmote(), this);
         getCommand("emote").setExecutor(new aimlessEmote());
         getCommand("emotelist").setExecutor(new aimlessEmoteList());
 
         InventoryChangeCommandExecutor inventoryChangeExecutor = new InventoryChangeCommandExecutor(inventoryChangePlugin);
         getCommand("inventorychange").setExecutor(inventoryChangeExecutor);
-
-        // MultiDropPlugin 설정
-        //MultiDropPlugin multiDropPlugin = new MultiDropPlugin();
-        //getServer().getPluginManager().registerEvents(multiDropPlugin, this);
-        //getCommand("multidrops").setExecutor(multiDropPlugin);
-        // 랜덤한 간격으로 작업 스케줄링
-        //scheduleRandomTask();
+        this.aimlessHidePlayerList = new aimlessHidePlayerList(); // aimlessHidePlayerList 객체 생성
+        getServer().getPluginManager().registerEvents(aimlessHidePlayerList, this); // aimlessHidePlayerList 리스너 등록
     }
     //진서야 사랑해
     @Override
