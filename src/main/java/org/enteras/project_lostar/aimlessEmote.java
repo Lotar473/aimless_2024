@@ -9,11 +9,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
+import org.bukkit.command.TabCompleter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class aimlessEmote implements Listener, CommandExecutor {
+public class aimlessEmote implements Listener, CommandExecutor, TabCompleter {
 
     private final Map<String, EmoteAction> emotes = new HashMap<>();
 
@@ -29,12 +32,13 @@ public class aimlessEmote implements Listener, CommandExecutor {
         });
 
         register("ㅗ", "망할", location -> {
-            location.getWorld().spawnParticle(Particle.HEART, location, 0, 0.0, 0.0, 0.0, 0.0);
+            Location particleLocation = location.clone().add(0, 2, 0); // 현재 위치에서 2 블록 위의 위치를 얻습니다.
+            location.getWorld().spawnParticle(Particle.HEART, particleLocation, 0, 0.0, 0.0, 0.0, 0.0);
         });
 
         register("damage", "상처", location -> {
             Location particleLocation = location.clone().add(0, 2, 0); // 현재 위치에서 2 블록 위의 위치를 얻습니다.
-            location.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, location, 0, 0.0, 0.0, 0.0, 0.0);
+            location.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, particleLocation, 0, 0.0, 0.0, 0.0, 0.0);
         });
 
         register("critical", "많은상처", location -> {
@@ -42,8 +46,9 @@ public class aimlessEmote implements Listener, CommandExecutor {
         });
 
         register("spit", "퉤", location -> {
+            Location particleLocation = location.clone().add(0, 1.45, 0);
             Vector v = location.getDirection();
-            location.getWorld().spawnParticle(Particle.SPIT, location, 0, v.getX(), v.getY(), v.getZ(), 1.0);
+            location.getWorld().spawnParticle(Particle.SPIT, particleLocation, 0, v.getX(), v.getY(), v.getZ(), 1.0);
             location.getWorld().playSound(location, Sound.ENTITY_LLAMA_SPIT, 1.0F, 1.0F);
         });
 
@@ -114,12 +119,12 @@ public class aimlessEmote implements Listener, CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("emote")) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage("Only players can use this command.");
+                sender.sendMessage("플레이어만 이 명령어를 사용할 수 있습니다.");
                 return true;
             }
 
             if (args.length == 0) {
-                sender.sendMessage("Usage: /emote <emote>");
+                sender.sendMessage("사용법: /emote <emote>");
                 return true;
             }
 
@@ -129,10 +134,26 @@ public class aimlessEmote implements Listener, CommandExecutor {
             if (emoteAction != null) {
                 emoteAction.perform(player.getLocation());
             } else {
-                sender.sendMessage("Unknown emote: " + emoteName);
+                sender.sendMessage("알 수 없는 이모트: " + emoteName);
             }
             return true;
         }
         return false;
+    }
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (command.getName().equalsIgnoreCase("emote")) {
+            if (args.length == 1) {
+                String input = args[0].toLowerCase();
+                List<String> completions = new ArrayList<>();
+                for (String emote : emotes.keySet()) {
+                    if (emote.startsWith(input)) {
+                        completions.add(emote);
+                    }
+                }
+                return completions;
+            }
+        }
+        return null;
     }
 }

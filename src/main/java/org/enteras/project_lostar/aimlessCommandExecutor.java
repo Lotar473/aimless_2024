@@ -5,8 +5,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.Bukkit;
+import org.bukkit.command.TabCompleter;
 
-public class aimlessCommandExecutor implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
     private boolean isHidePlayerListEnabled = false;
     private boolean isDeathMessageEnabled = false;
     private boolean isEmoteEnabled = false;
@@ -86,5 +90,23 @@ public class aimlessCommandExecutor implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
                 break;
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> completions = new ArrayList<>();
+        if (args.length == 1) {
+            String input = args[0].toLowerCase();
+            if ("hideplayerlist".startsWith(input)) {
+                completions.add("hideplayerlist");
+            }
+            if ("deathmessage".startsWith(input)) {
+                completions.add("deathmessage");
+            }
+            if ("emote".startsWith(input)) {
+                completions.add("emote");
+            }
+        }
+        return completions;
     }
 }
