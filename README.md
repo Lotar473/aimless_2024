@@ -8,5 +8,5 @@ Commands:
 /aimless <subcommand>
 ```
 ```
-emote
+/emote <emotename>
 ```
