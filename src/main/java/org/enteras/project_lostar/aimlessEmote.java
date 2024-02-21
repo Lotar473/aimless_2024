@@ -1,9 +1,6 @@
 package org.enteras.project_lostar;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,7 +19,8 @@ public class aimlessEmote implements Listener, CommandExecutor {
 
     public aimlessEmote() {
         register("angry", "화남", location -> {
-            location.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, location, 0, 0.0, 0.0, 0.0, 0.0);
+            Location particleLocation = location.clone().add(0, 2, 0);
+            location.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, particleLocation, 0, 0.0, 0.0, 0.0, 0.0);
         });
 
         register("heart", "하트", location -> {
@@ -35,6 +33,7 @@ public class aimlessEmote implements Listener, CommandExecutor {
         });
 
         register("damage", "상처", location -> {
+            Location particleLocation = location.clone().add(0, 2, 0); // 현재 위치에서 2 블록 위의 위치를 얻습니다.
             location.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, location, 0, 0.0, 0.0, 0.0, 0.0);
         });
 
@@ -49,12 +48,14 @@ public class aimlessEmote implements Listener, CommandExecutor {
         });
 
         register("no", "하지마", location -> {
-            location.getWorld().spawnParticle(Particle.BLOCK_MARKER, location, 0, 0.0, 0.0, 0.0, 0.0);
+            Location particleLocation = location.clone().add(0, 2, 0);
+            location.getWorld().spawnParticle(Particle.BLOCK_MARKER, particleLocation, 0, 0.0, 0.0, 0.0, 0.0, Bukkit.createBlockData(Material.BARRIER));
             location.getWorld().playSound(location, Sound.BLOCK_ANVIL_LAND, 0.5F, 0.1F);
         });
 
         register("note", "즐", location -> {
-            location.getWorld().spawnParticle(Particle.NOTE, location, 0, 0.0, 0.0, 0.0, 1.0);
+            Location particleLocation = location.clone().add(0, 2, 0); // 현재 위치에서 2 블록 위의 위치를 얻습니다.
+            location.getWorld().spawnParticle(Particle.NOTE, particleLocation, 0, 0.0, 0.0, 0.0, 1.0);
         });
 
         register("rage", "열받", location -> {
