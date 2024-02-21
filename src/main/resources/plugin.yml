@@ -50,3 +50,6 @@ commands:
   emote:
     description: '/emote'
     permission: LostaR.command.permission.
+  emotelist:
+    description: '/emotelist'
+    permission: LostaR.command.permission.
