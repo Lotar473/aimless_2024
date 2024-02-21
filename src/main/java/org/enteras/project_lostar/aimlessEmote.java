@@ -12,12 +12,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
-
+import org.bukkit.ChatColor;
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class aimlessEmote implements Listener, CommandExecutor {
 
+    private final List<String> emoteList = Arrays.asList("angry", "heart", "ㅗ", "damage", "critical", "spit", "no", "note", "rage", "tear", "lava", "honey");
     private final Map<String, EmoteAction> emotes = new HashMap<>();
 
     public aimlessEmote() {
@@ -117,12 +121,35 @@ public class aimlessEmote implements Listener, CommandExecutor {
                 return true;
             }
 
+            Player player = (Player) sender;
+
             if (args.length == 0) {
-                sender.sendMessage("Usage: /emote <emote>");
+                // 이모티콘 목록을 보여줍니다.
+                StringBuilder emoteListString = new StringBuilder();
+                for (String emote : emoteList) {
+                    emoteListString.append(emote).append(", ");
+                }
+                if (emoteListString.length() > 0) {
+                    emoteListString.delete(emoteListString.length() - 2, emoteListString.length());
+                }
+                sender.sendMessage(ChatColor.YELLOW + "Available emotes: " + emoteListString.toString());
+                return true;
+            } else if (args.length == 1) {
+                String partialName = args[0].toLowerCase();
+                List<String> matchedEmotes = new ArrayList<>();
+                for (String emote : emoteList) {
+                    if (emote.startsWith(partialName)) {
+                        matchedEmotes.add(emote);
+                    }
+                }
+                if (matchedEmotes.isEmpty()) {
+                    sender.sendMessage(ChatColor.RED + "No matching emotes found.");
+                } else {
+                    sender.sendMessage(ChatColor.YELLOW + "Matched emotes: " + String.join(", ", matchedEmotes));
+                }
                 return true;
             }
 
-            Player player = (Player) sender;
             String emoteName = args[0];
             EmoteAction emoteAction = emotes.get(emoteName.toLowerCase());
             if (emoteAction != null) {
