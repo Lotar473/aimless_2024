@@ -1,0 +1,52 @@
+name: LostaR
+version: '0.4.1'
+main: org.enteras.project_lostar.DungPlugin
+api-version: '1.20'
+commands:
+  dung:
+    description: '똥 명령어입니다.'
+    usage: '/dung을 입력해 보세요!'
+    permission: LostaR.command.permission
+  mondstadt:
+    description: '몬드성으로 워프합니다.'
+    usage: '/mondstadt'
+    permission: LostaR.command.permission
+  hub:
+    description: '스폰(0, 0)으로 워프합니다.'
+    usage: '/hub'
+    permission: LostaR.command.permission
+  boatrace:
+    description: '보트레이스(으)로 워프합니다.'
+    usage: 'boatrace'
+    permission: LostaR.command.permission
+  pee:
+    description: '오줌 명령어입니다.'
+    usage: '/pee를 입력해 보세요!'
+    permission: LostaR.command.permission
+  soonbo:
+    description: '순보!'
+    usage: '/soonbo를 입력해 보세요!'
+    permission: LostaR.command.permission
+  inventorychange:
+    description: '5분마다 플레이어의 인벤토리를 바꿉니다!'
+    usage: '/inventorychange <on|off>를 입력해 보세요!'
+    permission: LostaR.command.permission
+  chestbomb:
+    description: '상자를 제작해 보세요!'
+    usage: '/chestbomb <on|off>를 입력해 보세요!'
+    permission: LostaR.command.permission
+  autoc:
+    description: '보토크리퍼(으)로 워프합니다.'
+    usage: '/autoc'
+    permission: LostaR.command.permission
+  multidrops:
+    description: Toggle MultiDrops feature
+    usage: '/multidrops'
+    permission: LostaR.command.permission
+  aimless:
+    description: aimless 2024!
+    usage: '/aimless'
+    permission: LostaR.command.permission
+  emote:
+    description: '/emote'
+    permission: LostaR.command.permission.
