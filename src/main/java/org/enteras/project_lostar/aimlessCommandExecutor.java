@@ -19,13 +19,13 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (label.equalsIgnoreCase("aimless")) {
             if (args.length >= 2) {
-                String subCommand = args[0].toLowerCase(); // 입력된 서브 명령어를 소문자로 변환
-                String password = args[1]; // 패스워드 파라미터
+                String subCommand = args[0].toLowerCase();
+                String password = args[1];
 
-                if (password.equals("4732")) { // 패스워드가 4732인 경우 활성화만
+                if (password.equals("4732")) {
                     enableFeature(sender, subCommand);
                     return true;
-                } else if (password.equals("0473")) { // 패스워드가 0473인 경우 비활성화만
+                } else if (password.equals("0473")) {
                     disableFeature(sender, subCommand);
                     return true;
                 } else {
