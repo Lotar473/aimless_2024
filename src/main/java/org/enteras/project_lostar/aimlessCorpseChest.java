@@ -32,15 +32,15 @@ public class aimlessCorpseChest implements Listener {
 
         Inventory chestInventory = chest.getBlockInventory();
 
-        // 플레이어의 아이템을 상자에 추가
+        // 플레이어의 갑옷을 갑옷 거치대에 추가
+        addArmorStand(player, chest, deathLocation);
+
+        // 플레이어의 인벤토리 아이템을 상자에 추가
         for (ItemStack item : player.getInventory().getContents()) {
             if (item != null && item.getType() != Material.AIR) {
                 chestInventory.addItem(item);
             }
         }
-
-        // 갑옷 거치대 추가
-        addArmorStand(player, chest, deathLocation);
 
         // 원래의 드롭 아이템 제거
         event.getDrops().clear();
