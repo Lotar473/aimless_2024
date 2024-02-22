@@ -69,6 +69,11 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
                 // aimlessEmote 리스너 등록
                 Bukkit.getPluginManager().registerEvents(new aimlessEmote(), DungPlugin.getPlugin(DungPlugin.class));
                 break;
+            case "corpsechest":
+                sender.sendMessage(ChatColor.GREEN + "aimlessCorpseChest가 활성화되었습니다.");
+                // aimlessEmote 리스너 등록
+                Bukkit.getPluginManager().registerEvents(new aimlessCorpseChest(), DungPlugin.getPlugin(DungPlugin.class));
+                break;
             default:
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
                 break;
@@ -85,6 +90,9 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
                 break;
             case "emote":
                 sender.sendMessage(ChatColor.GREEN + "Emote가 비활성화되었습니다.");
+                break;
+            case "corpsechest":
+                sender.sendMessage(ChatColor.GREEN + "aimlessCorpseChest가 비활성화되었습니다.");
                 break;
             default:
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
@@ -105,6 +113,9 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
             }
             if ("emote".startsWith(input)) {
                 completions.add("emote");
+            }
+            if ("corpsechest".startsWith(input)) {
+                completions.add("corpsechest");
             }
         }
         return completions;

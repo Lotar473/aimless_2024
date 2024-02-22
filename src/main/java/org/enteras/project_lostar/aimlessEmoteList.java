@@ -10,8 +10,8 @@ public class aimlessEmoteList implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (label.equalsIgnoreCase("emotelist")) {
-            sender.sendMessage(ChatColor.WHITE + "Available emotes:");
-            sender.sendMessage(ChatColor.WHITE + "angry, heart, ㅗ, damage, critical, spit, no, note, rage, tear, lava, honey");
+            sender.sendMessage(ChatColor.WHITE + "사용 가능한 이모트:");
+            sender.sendMessage(ChatColor.WHITE + "angry, heart, ㅗ, damage, critical, gratz, spit, no, note, rage, tear, lava, honey");
             return true;
         }
         return false;

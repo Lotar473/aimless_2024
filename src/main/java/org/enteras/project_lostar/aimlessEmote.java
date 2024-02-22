@@ -4,12 +4,18 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.entity.Firework;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,6 +101,28 @@ public class aimlessEmote implements Listener, CommandExecutor, TabCompleter {
             }
         });
 
+        register("gratz", "경축", location -> {
+            for (int i = 0; i <= 1; i++) {
+                Vector v = new Vector(-0.1 + i * 0.2, -0.5, 0.4);
+                v.rotateAroundX(Math.toRadians(location.getPitch())).rotateAroundY(Math.toRadians(-location.getYaw()));
+
+                FireworkEffect effect = FireworkEffect.builder()
+                        .flicker(true)
+                        .withColor(Color.RED)
+                        .withColor(Color.ORANGE)
+                        .withColor(Color.YELLOW)
+                        .withColor(Color.GREEN)
+                        .withColor(Color.BLUE)
+                        .withColor(Color.PURPLE)
+                        .build();
+
+                // 폭죽 생성
+                Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+                FireworkMeta meta = (FireworkMeta) firework.getFireworkMeta(); // 메타데이터 가져오기
+                meta.addEffect(effect);
+                firework.setFireworkMeta(meta);
+            }
+        });
     }
 
     private void register(String name, String subname, EmoteAction emoteAction) {
