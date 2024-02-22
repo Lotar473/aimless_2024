@@ -58,13 +58,13 @@ public class aimlessCorpseChest implements Listener {
     private Chest createCorpseChest(Location location) {
         Block currentBlock = location.getBlock();
 
-        // 블록을 위로 탐색하여 공기가 아닌 첫 번째 블록을 찾습니다.
+        // 블록을 위로 탐색하여 공기가 아닌 첫 번째 블록 탐색
         while (currentBlock.getType() == Material.AIR && currentBlock.getY() > 0) {
             currentBlock = currentBlock.getRelative(BlockFace.DOWN);
         }
 
-        // 상자를 생성합니다.
-        currentBlock = currentBlock.getRelative(BlockFace.UP);
+        // 상자 생성
+        currentBlock = currentBlock.getRelative(BlockFace.DOWN); // 블록을 1칸 아래로 이동
         currentBlock.setType(Material.CHEST);
 
         BlockState blockState = currentBlock.getState();
@@ -83,9 +83,9 @@ public class aimlessCorpseChest implements Listener {
         BlockState state = signBlock.getState();
         if (state instanceof Sign) {
             Sign sign = (Sign) state;
-            sign.setLine(1, playerName); // 플레이어의 닉네임을 첫 번째 줄에 설정합니다.
-            sign.setLine(2, "여기에 잠들다."); // 두 번째 줄에 문구를 설정합니다.
-            sign.setGlowingText(true); // 흰색 먹물 효과를 적용합니다.
+            sign.setLine(1, playerName);
+            sign.setLine(2, "여기에 잠들다.");
+            sign.setGlowingText(true); // 발광 먹물 적용
             sign.update();
         }
     }
