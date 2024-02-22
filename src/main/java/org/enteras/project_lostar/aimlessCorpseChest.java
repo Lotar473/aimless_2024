@@ -22,6 +22,12 @@ public class aimlessCorpseChest implements Listener {
         Player player = event.getEntity();
         Location deathLocation = player.getLocation();
 
+        // 왼손에 있는 아이템을 드랍
+        ItemStack offHandItem = player.getInventory().getItemInOffHand();
+        if (offHandItem != null && offHandItem.getType() != Material.AIR) {
+            player.getWorld().dropItemNaturally(deathLocation, offHandItem);
+        }
+
         // 상자 생성
         Chest chest = createCorpseChest(deathLocation);
         if (chest == null) {
@@ -32,11 +38,11 @@ public class aimlessCorpseChest implements Listener {
 
         // 플레이어의 아이템을 상자에 추가
         for (ItemStack item : player.getInventory().getContents()) {
-            if (item != null && item.getType() != Material.AIR) {
+            if (item != null && item.getType() != Material.AIR && !isInOffHand(player, item)) {
                 if (chestInventory.firstEmpty() != -1) {
                     chestInventory.addItem(item);
                 } else {
-                    player.getWorld().dropItemNaturally(deathLocation, item);
+                    player.getWorld().dropItemNaturally(deathLocation, item); // 상자에 넣을 수 없는 아이템은 플레이어 위치에 드랍
                 }
             }
         }
@@ -46,13 +52,19 @@ public class aimlessCorpseChest implements Listener {
 
         // 핫바 슬롯의 아이템을 드롭
         for (ItemStack item : player.getInventory().getExtraContents()) {
-            if (item != null && item.getType() != Material.AIR) {
-                player.getWorld().dropItemNaturally(deathLocation, item);
+            if (item != null && item.getType() != Material.AIR && !isInOffHand(player, item)) {
+                player.getWorld().dropItemNaturally(deathLocation, item); // 왼손 슬롯 아이템도 드롭
             }
         }
 
         // 원래의 드롭 아이템 제거
         event.getDrops().clear();
+    }
+
+    // 왼손 슬롯에 아이템이 있는지 확인하는 유틸리티 메서드
+    private boolean isInOffHand(Player player, ItemStack item) {
+        ItemStack offHandItem = player.getInventory().getItemInOffHand();
+        return offHandItem != null && offHandItem.equals(item);
     }
 
     private Chest createCorpseChest(Location location) {

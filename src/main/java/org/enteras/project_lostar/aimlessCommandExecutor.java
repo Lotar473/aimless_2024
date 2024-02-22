@@ -7,9 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.command.TabCompleter;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
 
@@ -71,8 +71,11 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
                 break;
             case "corpsechest":
                 sender.sendMessage(ChatColor.GREEN + "aimlessCorpseChest가 활성화되었습니다.");
-                // aimlessEmote 리스너 등록
                 Bukkit.getPluginManager().registerEvents(new aimlessCorpseChest(), DungPlugin.getPlugin(DungPlugin.class));
+                break;
+            case "prestige":
+                sender.sendMessage(ChatColor.GREEN + "aimlessPrestige가 활성화되었습니다.");
+                Bukkit.getPluginManager().registerEvents(new aimlessPrestige((JavaPlugin) plugin), plugin);
                 break;
             default:
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
@@ -93,6 +96,9 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
                 break;
             case "corpsechest":
                 sender.sendMessage(ChatColor.GREEN + "aimlessCorpseChest가 비활성화되었습니다.");
+                break;
+            case "prestige":
+                sender.sendMessage(ChatColor.GREEN + "aimlessPrestige가 비활성화되었습니다.");
                 break;
             default:
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
@@ -116,6 +122,9 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
             }
             if ("corpsechest".startsWith(input)) {
                 completions.add("corpsechest");
+            }
+            if ("prestige".startsWith(input)) {
+                completions.add("prestige");
             }
         }
         return completions;
