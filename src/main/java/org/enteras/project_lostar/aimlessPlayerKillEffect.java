@@ -29,6 +29,7 @@ public class aimlessPlayerKillEffect implements Listener {
     }
 
     private void playCustomSound(Player player) {
-        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 2f);
+        player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1f, 1f);
+        player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f);
     }
 }
