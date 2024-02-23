@@ -5,8 +5,25 @@ by LotaR
 
 Commands:  
 ```
-/aimless <subcommand>
+/aimless <subcommand> <password>
 ```
 ```
 /emote <emotename>
+```
+
+SubCommands:  
+```
+hideplayerlist
+```
+```
+deathmessage
+```
+```
+emote
+```
+```
+corpsechest
+```
+```
+prestige
 ```
