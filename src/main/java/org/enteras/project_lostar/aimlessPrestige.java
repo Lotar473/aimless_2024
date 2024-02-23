@@ -35,8 +35,9 @@ public class aimlessPrestige implements Listener {
         if (killer != null) {
             UUID killerUUID = killer.getUniqueId();
             int kills = getPlayerKills(killerUUID);
+            // 이전 킬 수를 누적하는 것이 아니라 한 번만 증가시킴
             playerKills.put(killerUUID, kills + 1);
-            savePlayerKills(killerUUID, kills + 1); // 업데이트된 킬을 설정에 저장
+            savePlayerKills(killerUUID); // 업데이트된 킬을 설정에 저장
         }
     }
 
@@ -62,7 +63,8 @@ public class aimlessPrestige implements Listener {
     }
 
     // 설정에 킬을 저장
-    private void savePlayerKills(UUID uuid, int kills) {
+    private void savePlayerKills(UUID uuid) {
+        int kills = playerKills.get(uuid);
         config.set(uuid.toString(), kills);
         plugin.saveConfig();
     }
