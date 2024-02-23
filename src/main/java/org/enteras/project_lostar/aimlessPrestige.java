@@ -274,10 +274,9 @@ public class aimlessPrestige implements Listener {
             symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "0" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
 
         } else {
-            color = ChatColor.WHITE;
-            symbol = "✫";
+            color = ChatColor.DARK_GRAY;
+            symbol = "[0✫]";
         }
         return "" + color + symbol + ChatColor.RESET + "";
     }
-
 }

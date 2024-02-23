@@ -59,6 +59,7 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
         Bukkit.getPluginManager().registerEvents(new aimlessEmote(), plugin);
         Bukkit.getPluginManager().registerEvents(new aimlessCorpseChest(), plugin);
         Bukkit.getPluginManager().registerEvents(new aimlessPrestige((JavaPlugin) plugin), plugin);
+        Bukkit.getPluginManager().registerEvents(new aimlessPreventingMultiKills(), plugin);
     }
 
     private void enableFeature(CommandSender sender, String subCommand) {
@@ -85,6 +86,10 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
                 sender.sendMessage(ChatColor.GREEN + "aimlessPrestige가 활성화되었습니다.");
                 Bukkit.getPluginManager().registerEvents(new aimlessPrestige((JavaPlugin) plugin), plugin);
                 break;
+            case "preventmultikills":
+                sender.sendMessage(ChatColor.GREEN + "aimlessPreventMultiKills가 활성화되었습니다.");
+                Bukkit.getPluginManager().registerEvents(new aimlessPreventingMultiKills(), DungPlugin.getPlugin(DungPlugin.class));
+                break;
             default:
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
                 break;
@@ -107,6 +112,9 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
                 break;
             case "prestige":
                 sender.sendMessage(ChatColor.GREEN + "aimlessPrestige가 비활성화되었습니다.");
+                break;
+            case "preventmultikills":
+                sender.sendMessage(ChatColor.GREEN + "aimlessPreventMultiKills가 비활성화되었습니다.");
                 break;
             default:
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
@@ -133,6 +141,9 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
             }
             if ("prestige".startsWith(input)) {
                 completions.add("prestige");
+            }
+            if ("preventmultikills".startsWith(input)) {
+                completions.add("preventmultikills");
             }
             if ("package".startsWith(input)) {
                 completions.add("package");

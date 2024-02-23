@@ -1,64 +1,18 @@
 package org.enteras.project_lostar;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.comphenix.protocol.wrappers.PlayerInfoData;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.comphenix.protocol.wrappers.WrappedGameProfile;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+public class aimlessHidePlayerList implements Listener {
 
-public class aimlessHidePlayerList implements Runnable, Listener {
-
-    private static boolean update = false;
-
-    public static void update() {
-        update = true;
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.setJoinMessage(null); // 입장 메시지를 null로 설정하여 아무런 메시지도 표시되지 않도록 함
     }
 
-    @Override
-    public void run() {
-        if (update) {
-            update = false;
-            updatePlayerList();
-        }
-    }
-
-    private void updatePlayerList() {
-        PacketContainer packet = new PacketContainer(PacketType.Play.Server.PLAYER_INFO);
-        List<PlayerInfoData> list = new ArrayList<>();
-
-        for (org.bukkit.OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-            WrappedGameProfile profile;
-            if (offlinePlayer instanceof Player) {
-                profile = WrappedGameProfile.fromPlayer((Player) offlinePlayer);
-            } else {
-                profile = WrappedGameProfile.fromOfflinePlayer(offlinePlayer).withName(offlinePlayer.getName());
-            }
-
-            list.add(new PlayerInfoData(
-                    profile,
-                    0,
-                    EnumWrappers.NativeGameMode.NOT_SET,
-                    WrappedChatComponent.fromText(offlinePlayer.getName())
-            ));
-        }
-
-        packet.getPlayerInfoAction().write(0, EnumWrappers.PlayerInfoAction.ADD_PLAYER);
-        packet.getPlayerInfoDataLists().write(0, list);
-
-        com.comphenix.protocol.ProtocolManager pm = ProtocolLibrary.getProtocolManager();
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            pm.sendServerPacket(player, packet);
-        }
+    public static void register(JavaPlugin plugin) {
+        plugin.getServer().getPluginManager().registerEvents(new aimlessHidePlayerList(), plugin);
     }
 }
