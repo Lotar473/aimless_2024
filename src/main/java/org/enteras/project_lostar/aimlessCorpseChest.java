@@ -70,41 +70,67 @@ public class aimlessCorpseChest implements Listener {
     private Chest createCorpseChest(Location location) {
         Block currentBlock = location.getBlock();
 
-        // 블록을 위로 탐색하여 공기가 아닌 첫 번째 블록 탐색
-        while (currentBlock.getType() == Material.AIR && currentBlock.getY() > 0) {
-            currentBlock = currentBlock.getRelative(BlockFace.DOWN);
-        }
+        // 블록이 이미 채워져 있는지 확인
+        if (currentBlock.getType() != Material.AIR) {
+            // 블록이 이미 채워져 있으면 위로 쭉 올라가면서 빈 공간을 찾음
+            while (currentBlock.getType() != Material.AIR && currentBlock.getY() < 255) {
+                currentBlock = currentBlock.getRelative(BlockFace.UP);
+            }
 
-        // 상자 생성
-        currentBlock = currentBlock.getRelative(BlockFace.UP); // 블록을 1칸 위로 이동
-        currentBlock.setType(Material.CHEST);
-
-        BlockState blockState = currentBlock.getState();
-        if (blockState instanceof Chest) {
-            return (Chest) blockState;
+            // 빈 공간을 찾은 경우 상자 설치
+            if (currentBlock.getType() == Material.AIR) {
+                currentBlock.setType(Material.CHEST);
+                BlockState blockState = currentBlock.getState();
+                if (blockState instanceof Chest) {
+                    return (Chest) blockState;
+                }
+            }
+        } else {
+            // 블록이 비어있는 경우 상자 생성
+            currentBlock.setType(Material.CHEST);
+            BlockState blockState = currentBlock.getState();
+            if (blockState instanceof Chest) {
+                return (Chest) blockState;
+            }
         }
 
         return null;
     }
 
     private void createSignAboveChest(Chest chest, String playerName) {
-        Location signLocation = chest.getLocation().add(0, 1, 0);
+        Location signLocation = chest.getLocation().clone().add(0, 1, 0);
         Block signBlock = signLocation.getBlock();
 
-        while (signBlock.getType() == Material.AIR && signBlock.getY() > 0) {
-            signBlock = signBlock.getRelative(BlockFace.DOWN);
-        }
+        // 상자 바로 위에 표지판 설치
+        if (signBlock.getType() != Material.AIR) {
+            // 블록이 이미 채워져 있는 경우 위로 쭉 올라가면서 빈 공간을 찾음
+            while (signBlock.getType() != Material.AIR && signBlock.getY() < 255) {
+                signBlock = signBlock.getRelative(BlockFace.UP);
+            }
 
-        signBlock = signBlock.getRelative(BlockFace.UP);
-        signBlock.setType(Material.OAK_SIGN);
-
-        BlockState state = signBlock.getState();
-        if (state instanceof Sign) {
-            Sign sign = (Sign) state;
-            sign.setLine(1, playerName);
-            sign.setLine(2, "여기에 잠들다.");
-            sign.setGlowingText(true); // 발광 텍스트 적용
-            sign.update();
+            // 빈 공간을 찾은 경우 표지판 설치
+            if (signBlock.getType() == Material.AIR) {
+                signBlock.setType(Material.OAK_SIGN);
+                BlockState state = signBlock.getState();
+                if (state instanceof Sign) {
+                    Sign sign = (Sign) state;
+                    sign.setLine(1, playerName);
+                    sign.setLine(2, "여기에 잠들다.");
+                    sign.setGlowingText(true); // 발광 텍스트 적용
+                    sign.update();
+                }
+            }
+        } else {
+            // 블록이 비어있는 경우 표지판 설치
+            signBlock.setType(Material.OAK_SIGN);
+            BlockState state = signBlock.getState();
+            if (state instanceof Sign) {
+                Sign sign = (Sign) state;
+                sign.setLine(1, playerName);
+                sign.setLine(2, "여기에 잠들다.");
+                sign.setGlowingText(true); // 발광 텍스트 적용
+                sign.update();
+            }
         }
     }
 }
