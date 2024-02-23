@@ -76,7 +76,7 @@ public class aimlessCorpseChest implements Listener {
         }
 
         // 상자 생성
-        currentBlock = currentBlock.getRelative(BlockFace.DOWN); // 블록을 1칸 아래로 이동
+        currentBlock = currentBlock.getRelative(BlockFace.UP); // 블록을 1칸 위로 이동
         currentBlock.setType(Material.CHEST);
 
         BlockState blockState = currentBlock.getState();
@@ -90,6 +90,12 @@ public class aimlessCorpseChest implements Listener {
     private void createSignAboveChest(Chest chest, String playerName) {
         Location signLocation = chest.getLocation().add(0, 1, 0);
         Block signBlock = signLocation.getBlock();
+
+        while (signBlock.getType() == Material.AIR && signBlock.getY() > 0) {
+            signBlock = signBlock.getRelative(BlockFace.DOWN);
+        }
+
+        signBlock = signBlock.getRelative(BlockFace.UP);
         signBlock.setType(Material.OAK_SIGN);
 
         BlockState state = signBlock.getState();
@@ -97,7 +103,7 @@ public class aimlessCorpseChest implements Listener {
             Sign sign = (Sign) state;
             sign.setLine(1, playerName);
             sign.setLine(2, "여기에 잠들다.");
-            sign.setGlowingText(true); // 발광 먹물 적용
+            sign.setGlowingText(true); // 발광 텍스트 적용
             sign.update();
         }
     }

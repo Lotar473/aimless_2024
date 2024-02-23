@@ -73,9 +73,9 @@ public class aimlessPrestige implements Listener {
     }
 
     private String getRank(int kills) {
-        if (kills >= 100) {
+        if (kills >= 100 && kills < 200) {
             return ChatColor.WHITE + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET + ChatColor.AQUA + ChatColor.BOLD.toString() + " ⚝L " + ChatColor.RESET + ChatColor.WHITE + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET;
-        } else if (kills >= 50) {
+        } else if (kills >= 50 && kills < 100) {
             return ChatColor.WHITE + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET + ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + " X " + ChatColor.RESET + ChatColor.WHITE + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET;
         } else if (kills == 49) {
             return ChatColor.GOLD + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET + ChatColor.RED + ChatColor.BOLD.toString() + " U " + ChatColor.RESET + ChatColor.GOLD + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET;
@@ -97,26 +97,10 @@ public class aimlessPrestige implements Listener {
             return ChatColor.GOLD + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET + ChatColor.RED + ChatColor.BOLD.toString() + " U " + ChatColor.RESET + ChatColor.GOLD + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET;
         } else if (kills == 40) {
             return ChatColor.GOLD + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET + ChatColor.RED + ChatColor.BOLD.toString() + " U " + ChatColor.RESET + ChatColor.GOLD + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET;
-        } else if (kills == 39) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
-        } else if (kills == 38) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
-        } else if (kills == 37) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
-        } else if (kills == 36) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
-        } else if (kills == 35) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
-        } else if (kills == 34) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
-        } else if (kills == 33) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
-        } else if (kills == 32) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
-        } else if (kills == 31) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
-        } else if (kills == 30) {
-            return ChatColor.GOLD + ChatColor.BOLD.toString() + "SS" + ChatColor.RESET;
+
+        } else if (kills == 39 || kills == 38 || kills == 37 || kills == 36 || kills == 35 || kills == 34 || kills == 33 || kills == 32 || kills == 31 || kills == 30) {
+            return ChatColor.WHITE + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD.toString() + " SS " + ChatColor.RESET + ChatColor.WHITE + ChatColor.MAGIC.toString() + "L" + ChatColor.RESET;
+
         } else if (kills == 29) {
             return ChatColor.YELLOW + ChatColor.BOLD.toString() + "S+" + ChatColor.RESET;
         } else if (kills == 28) {
@@ -145,6 +129,7 @@ public class aimlessPrestige implements Listener {
             return ChatColor.YELLOW + ChatColor.BOLD.toString() + "S+" + ChatColor.RESET;
         } else if (kills == 16) {
             return ChatColor.YELLOW + ChatColor.BOLD.toString() + "S+" + ChatColor.RESET;
+
         } else if (kills == 15) {
             return ChatColor.YELLOW + "S" + ChatColor.RESET;
         } else if (kills == 14) {
@@ -155,24 +140,28 @@ public class aimlessPrestige implements Listener {
             return ChatColor.YELLOW + "S-" + ChatColor.RESET;
         } else if (kills == 11) {
             return ChatColor.YELLOW + "S-" + ChatColor.RESET;
+
         } else if (kills == 10) {
             return ChatColor.GREEN + "A+" + ChatColor.RESET;
         } else if (kills == 9) {
             return ChatColor.DARK_GREEN + "A" + ChatColor.RESET;
         } else if (kills == 8) {
             return ChatColor.GREEN + "A-" + ChatColor.RESET;
+
         } else if (kills == 7) {
             return ChatColor.DARK_AQUA + "B+" + ChatColor.RESET;
         } else if (kills == 6) {
             return ChatColor.DARK_AQUA + "B" + ChatColor.RESET;
         } else if (kills == 5) {
             return ChatColor.BLUE + "B-" + ChatColor.RESET;
+
         } else if (kills == 4) {
             return ChatColor.DARK_PURPLE + "C+" + ChatColor.RESET;
         } else if (kills == 3) {
             return ChatColor.DARK_PURPLE + "C" + ChatColor.RESET;
         } else if (kills == 2) {
             return ChatColor.DARK_PURPLE + "C-" + ChatColor.RESET;
+
         } else {
             return ChatColor.GRAY + "D" + ChatColor.RESET;
         }
@@ -267,16 +256,19 @@ public class aimlessPrestige implements Listener {
             symbol = "[" + kills + "✫" + "]";
         } else if (kills >= 50 && kills < 60) {
             color = ChatColor.AQUA;
-            symbol = "[" + ChatColor.BOLD.toString() + kills + "✫" + "]";
+            symbol = ChatColor.BOLD + "[" + ChatColor.BOLD.toString() + kills + "✫" + "]";
         } else if (kills >= 60 && kills < 70) {
             color = ChatColor.GREEN;
-            symbol = "[" + ChatColor.BOLD.toString() + kills + "✫" + "]";
+            symbol = ChatColor.BOLD + "[" + ChatColor.BOLD.toString() + kills + "✫" + "]";
         } else if (kills >= 70 && kills < 80) {
             color = ChatColor.YELLOW;
-            symbol = "[" + ChatColor.BOLD.toString() + kills + "✫" + "]";
+            symbol = ChatColor.BOLD + "[" + ChatColor.BOLD.toString() + kills + "✫" + "]";
         } else if (kills >= 80 && kills < 90) {
+            color = ChatColor.RED;
+            symbol = ChatColor.BOLD + "[" + ChatColor.BOLD.toString() + kills + "✫" + "]";
+        } else if (kills >= 90 && kills < 100) {
             color = ChatColor.DARK_RED;
-            symbol = "[" + ChatColor.BOLD.toString() + kills + "✫" + "]";
+            symbol = ChatColor.BOLD + "[" + ChatColor.BOLD.toString() + kills + "✫" + "]";
         } else if (kills == 100) {
             color = ChatColor.RED;
             symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "0" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";

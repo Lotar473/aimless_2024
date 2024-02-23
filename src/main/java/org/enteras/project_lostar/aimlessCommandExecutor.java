@@ -2,6 +2,7 @@ package org.enteras.project_lostar;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,6 +11,8 @@ import org.bukkit.command.TabCompleter;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 
 public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
 
@@ -31,15 +34,11 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (label.equalsIgnoreCase("aimless")) {
-            if (args.length >= 2) {
-                String subCommand = args[0].toLowerCase();
+            if (args.length >= 2 && args[0].equalsIgnoreCase("package")) {
                 String password = args[1];
 
                 if (password.equals("4732")) {
-                    enableFeature(sender, subCommand);
-                    return true;
-                } else if (password.equals("0473")) {
-                    disableFeature(sender, subCommand);
+                    enableAllPackages(sender);
                     return true;
                 } else {
                     sender.sendMessage(ChatColor.RED + "올바른 패스워드를 입력하세요.");
@@ -47,10 +46,19 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
                 }
             }
 
-            sender.sendMessage("사용법: /aimless <subCommand> <password>");
+            sender.sendMessage("사용법: /aimless package <password>");
             return true;
         }
         return false;
+    }
+
+    private void enableAllPackages(CommandSender sender) {
+        sender.sendMessage(ChatColor.GREEN + "모든 패키지가 활성화되었습니다.");
+        Bukkit.getPluginManager().registerEvents(listener, plugin);
+        Bukkit.getPluginManager().registerEvents(new aimlessDeathMessage(), plugin);
+        Bukkit.getPluginManager().registerEvents(new aimlessEmote(), plugin);
+        Bukkit.getPluginManager().registerEvents(new aimlessCorpseChest(), plugin);
+        Bukkit.getPluginManager().registerEvents(new aimlessPrestige((JavaPlugin) plugin), plugin);
     }
 
     private void enableFeature(CommandSender sender, String subCommand) {
@@ -125,6 +133,9 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
             }
             if ("prestige".startsWith(input)) {
                 completions.add("prestige");
+            }
+            if ("package".startsWith(input)) {
+                completions.add("package");
             }
         }
         return completions;
