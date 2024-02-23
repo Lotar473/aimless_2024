@@ -1,14 +1,13 @@
 package org.enteras.project_lostar;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class aimlessPlayerKillEffect implements Listener {
 
@@ -18,18 +17,19 @@ public class aimlessPlayerKillEffect implements Listener {
             Player killer = event.getEntity().getKiller();
             if (event.getEntityType() == EntityType.PLAYER) {
                 Player victim = (Player) event.getEntity();
-                summonSilentLightning(victim);
+                playSoulParticles(victim.getLocation());
                 playCustomSound(killer);
             }
         }
     }
 
-    private void summonSilentLightning(Player player) {
-        player.getWorld().strikeLightningEffect(player.getLocation());
+    private void playSoulParticles(Location location) {
+        location.getWorld().spawnParticle(Particle.SOUL, location, 222, 0, 1.5, 0, 0.1);
     }
 
     private void playCustomSound(Player player) {
         player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1f, 1f);
         player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f);
     }
+
 }
