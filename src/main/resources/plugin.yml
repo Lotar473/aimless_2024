@@ -56,3 +56,6 @@ commands:
   aimlesstitle:
     description: '/aimlesstitle'
     permission: LostaR.command.permission.
+  randomspawn:
+    description: '/randomspawn'
+    permission: LostaR.command.permission.

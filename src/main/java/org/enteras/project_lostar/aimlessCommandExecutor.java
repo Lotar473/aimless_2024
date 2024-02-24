@@ -60,7 +60,6 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
         Bukkit.getPluginManager().registerEvents(new aimlessCorpseChest(), plugin);
         Bukkit.getPluginManager().registerEvents(new aimlessPreventingMultiKills(), plugin);
         Bukkit.getPluginManager().registerEvents(new aimlessPlayerKillEffect(), plugin);
-        Bukkit.getPluginManager().registerEvents(new aimlessRandomSpawn((JavaPlugin) plugin), plugin);
     }
 
     private void enableFeature(CommandSender sender, String subCommand) {
@@ -91,10 +90,6 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
                 sender.sendMessage(ChatColor.GREEN + "aimlessPreventMultiKills가 활성화되었습니다.");
                 Bukkit.getPluginManager().registerEvents(new aimlessPlayerKillEffect(), DungPlugin.getPlugin(DungPlugin.class));
                 break;
-            case "randomspawn":
-                sender.sendMessage(ChatColor.GREEN + "aimlessRandomSpawn가 활성화되었습니다.");
-                Bukkit.getPluginManager().registerEvents(new aimlessRandomSpawn((JavaPlugin) plugin), plugin);
-                break;
             default:
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
                 break;
@@ -120,9 +115,6 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
                 break;
             case "playerkilleffect":
                 sender.sendMessage(ChatColor.GREEN + "aimlessPreventMultiKills가 비활성화되었습니다.");
-                break;
-            case "randomspawn":
-                sender.sendMessage(ChatColor.GREEN + "aimlessRandomSpawn가 비활성화되었습니다.");
                 break;
             default:
                 sender.sendMessage(ChatColor.RED + "올바르지 않은 서브 명령어입니다.");
@@ -152,9 +144,6 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
             }
             if ("playerkilleffect".startsWith(input)) {
                 completions.add("playerkilleffect");
-            }
-            if ("randomspawn".startsWith(input)) {
-                completions.add("randomspawn");
             }
             if ("package".startsWith(input)) {
                 completions.add("package");
