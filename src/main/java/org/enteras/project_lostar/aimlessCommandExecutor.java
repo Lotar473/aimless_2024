@@ -58,7 +58,6 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
         Bukkit.getPluginManager().registerEvents(new aimlessDeathMessage(), plugin);
         Bukkit.getPluginManager().registerEvents(new aimlessEmote(), plugin);
         Bukkit.getPluginManager().registerEvents(new aimlessCorpseChest(), plugin);
-        Bukkit.getPluginManager().registerEvents(new aimlessPrestige((JavaPlugin) plugin), plugin);
         Bukkit.getPluginManager().registerEvents(new aimlessPreventingMultiKills(), plugin);
         Bukkit.getPluginManager().registerEvents(new aimlessPlayerKillEffect(), plugin);
         Bukkit.getPluginManager().registerEvents(new aimlessRandomSpawn((JavaPlugin) plugin), plugin);
@@ -83,10 +82,6 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
             case "corpsechest":
                 sender.sendMessage(ChatColor.GREEN + "aimlessCorpseChest가 활성화되었습니다.");
                 Bukkit.getPluginManager().registerEvents(new aimlessCorpseChest(), DungPlugin.getPlugin(DungPlugin.class));
-                break;
-            case "prestige":
-                sender.sendMessage(ChatColor.GREEN + "aimlessPrestige가 활성화되었습니다.");
-                Bukkit.getPluginManager().registerEvents(new aimlessPrestige((JavaPlugin) plugin), plugin);
                 break;
             case "preventmultikills":
                 sender.sendMessage(ChatColor.GREEN + "aimlessPreventMultiKills가 활성화되었습니다.");
@@ -120,14 +115,12 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
             case "corpsechest":
                 sender.sendMessage(ChatColor.GREEN + "aimlessCorpseChest가 비활성화되었습니다.");
                 break;
-            case "prestige":
-                sender.sendMessage(ChatColor.GREEN + "aimlessPrestige가 비활성화되었습니다.");
-                break;
             case "preventmultikills":
                 sender.sendMessage(ChatColor.GREEN + "aimlessPreventMultiKills가 비활성화되었습니다.");
                 break;
             case "playerkilleffect":
                 sender.sendMessage(ChatColor.GREEN + "aimlessPreventMultiKills가 비활성화되었습니다.");
+                break;
             case "randomspawn":
                 sender.sendMessage(ChatColor.GREEN + "aimlessRandomSpawn가 비활성화되었습니다.");
                 break;
@@ -153,9 +146,6 @@ public class aimlessCommandExecutor implements CommandExecutor, TabCompleter {
             }
             if ("corpsechest".startsWith(input)) {
                 completions.add("corpsechest");
-            }
-            if ("prestige".startsWith(input)) {
-                completions.add("prestige");
             }
             if ("preventmultikills".startsWith(input)) {
                 completions.add("preventmultikills");

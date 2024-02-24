@@ -53,3 +53,6 @@ commands:
   emotelist:
     description: '/emotelist'
     permission: LostaR.command.permission.
+  aimlesstitle:
+    description: '/aimlesstitle'
+    permission: LostaR.command.permission.

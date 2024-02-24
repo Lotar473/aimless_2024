@@ -33,6 +33,7 @@ public class DungPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new aimlessEmote(), this);
         getCommand("emote").setExecutor(new aimlessEmote());
         getCommand("emotelist").setExecutor(new aimlessEmoteList());
+        getCommand("aimlesstitle").setExecutor(new aimlessPrestige(this));
 
         InventoryChangeCommandExecutor inventoryChangeExecutor = new InventoryChangeCommandExecutor(inventoryChangePlugin);
         getCommand("inventorychange").setExecutor(inventoryChangeExecutor);

@@ -2,6 +2,10 @@ package org.enteras.project_lostar;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,16 +18,33 @@ import java.util.Map;
 import java.util.UUID;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public class aimlessPrestige implements Listener {
+public class aimlessPrestige implements Listener, CommandExecutor {
     private final Map<UUID, Integer> playerKills = new HashMap<>();
+    private final Map<UUID, String> playerTitles = new HashMap<>();
     private final JavaPlugin plugin;
     private final FileConfiguration config;
+    private final ConfigurationSection killsSection;
 
     public aimlessPrestige(JavaPlugin plugin) {
         this.plugin = plugin;
         this.config = plugin.getConfig();
 
-        loadPlayerKills();
+        // "kills" 섹션의 하위 섹션을 가져옴
+        killsSection = config.getConfigurationSection("kills");
+        if (killsSection != null) {
+            for (String uuidString : killsSection.getKeys(false)) {
+                UUID uuid = UUID.fromString(uuidString);
+                int kills = killsSection.getInt(uuidString);
+                playerKills.put(uuid, kills);
+
+                // 칭호 정보도 로드할 수 있음
+                String title = config.getString("titles." + uuidString);
+                if (title != null && !title.isEmpty()) {
+                    playerTitles.put(uuid, title);
+                }
+            }
+        }
+
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -35,9 +56,8 @@ public class aimlessPrestige implements Listener {
         if (killer != null) {
             UUID killerUUID = killer.getUniqueId();
             int kills = getPlayerKills(killerUUID);
-            // 이전 킬 수를 누적하는 것이 아니라 한 번만 증가시킴
             playerKills.put(killerUUID, kills + 1);
-            savePlayerKills(killerUUID); // 업데이트된 킬을 설정에 저장
+            savePlayerKills(killerUUID);
         }
     }
 
@@ -46,32 +66,108 @@ public class aimlessPrestige implements Listener {
         Player player = event.getPlayer();
         int kills = getPlayerKills(player.getUniqueId());
         String rank = getRank(kills);
+        String title = getPlayerTitle(player.getUniqueId());
 
-        // 채팅 메시지에 랭크와 킬 수 추가
-        String chatMessage = String.format("[%s] %s %s: %s",
-                rank, formatKills(kills), player.getName(), event.getMessage());
+        // 칭호가 있는 경우에만 추가합니다.
+        String titleMessage = "";
+        if (title != null && !title.isEmpty()) {
+            titleMessage = ChatColor.translateAlternateColorCodes('&', title) + " ";
+        }
+
+        String chatMessage = String.format("[%s] %s %s%s: %s",
+                rank, formatKills(kills), titleMessage, player.getName(), event.getMessage());
+
         event.setFormat(chatMessage);
     }
 
-    // 설정에서 킬을 불러옴
-    private void loadPlayerKills() {
-        for (String uuidString : config.getKeys(false)) {
-            UUID uuid = UUID.fromString(uuidString);
-            int kills = config.getInt(uuidString);
-            playerKills.put(uuid, kills);
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("aimlesstitle")) {
+            if (args.length >= 2) {
+                int titleIndex;
+                try {
+                    titleIndex = Integer.parseInt(args[0]);
+                } catch (NumberFormatException e) {
+                    sender.sendMessage(ChatColor.RED + "칭호 인덱스는 숫자여야 합니다.");
+                    return false;
+                }
+
+                String playerName = args[1];
+                Player targetPlayer = Bukkit.getPlayer(playerName);
+
+                if (targetPlayer == null || !targetPlayer.isOnline()) {
+                    sender.sendMessage(ChatColor.RED + "플레이어 " + playerName + "을(를) 찾을 수 없습니다.");
+                    return false;
+                }
+
+                String title = getTitleByIndex(titleIndex);
+                if (title == null) {
+                    sender.sendMessage(ChatColor.RED + "해당 인덱스에 해당하는 칭호를 찾을 수 없습니다.");
+                    return false;
+                }
+
+                setPlayerTitle(targetPlayer.getUniqueId(), title);
+                sender.sendMessage(ChatColor.GREEN + targetPlayer.getName() + "님에게 칭호가 설정되었습니다: " + title);
+                return true;
+            } else {
+                sender.sendMessage(ChatColor.RED + "사용법: /aimlesstitle <칭호 인덱스> <플레이어 닉네임>");
+                return false;
+            }
+        }
+        return false;
+    }
+
+
+    private void loadPlayerData() {
+        // "kills" 섹션의 하위 섹션을 가져옴
+        ConfigurationSection killsSection = config.getConfigurationSection("kills");
+        if (killsSection != null) {
+            for (String uuidString : killsSection.getKeys(false)) {
+                UUID uuid = UUID.fromString(uuidString);
+                int kills = killsSection.getInt(uuidString);
+                playerKills.put(uuid, kills);
+
+                // 칭호 정보도 로드할 수 있음
+                String title = config.getString("titles." + uuidString);
+                if (title != null && !title.isEmpty()) {
+                    playerTitles.put(uuid, title);
+                }
+            }
         }
     }
 
-    // 설정에 킬을 저장
+
     private void savePlayerKills(UUID uuid) {
         int kills = playerKills.get(uuid);
-        config.set(uuid.toString(), kills);
+        config.set("kills." + uuid.toString(), kills);
         plugin.saveConfig();
     }
 
-    // 맵에서 플레이어의 킬을 가져옴
     private int getPlayerKills(UUID uuid) {
         return playerKills.getOrDefault(uuid, 0);
+    }
+
+    private void setPlayerTitle(UUID uuid, String title) {
+        playerTitles.put(uuid, title);
+        config.set("titles." + uuid.toString(), title); // 플레이어의 칭호를 config.yml에 저장
+        plugin.saveConfig(); // 변경 사항 저장
+    }
+
+    private String getPlayerTitle(UUID uuid) {
+        return playerTitles.getOrDefault(uuid, null);
+    }
+
+    private String getTitleByIndex(int index) {
+        // 여기에 인덱스에 해당하는 칭호를 반환하는 로직을 추가하세요.
+        switch (index) {
+            case 1:
+                return "[" + ChatColor.RED + ChatColor.BOLD.toString() + "First Blood" + ChatColor.RESET + "]"; // 인덱스 1에 해당하는 칭호
+            case 2:
+                return "칭호2"; // 인덱스 2에 해당하는 칭호
+            // 추가적인 칭호들의 처리
+            default:
+                return null; // 인덱스에 해당하는 칭호가 없는 경우
+        }
     }
 
     private String getRank(int kills) {
@@ -274,6 +370,33 @@ public class aimlessPrestige implements Listener {
         } else if (kills == 100) {
             color = ChatColor.RED;
             symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "0" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
+        } else if (kills == 101) { //101킬
+            color = ChatColor.RED;
+            symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "1" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
+        } else if (kills == 102) { //102킬
+            color = ChatColor.RED;
+            symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "2" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
+        } else if (kills == 103) { //103킬
+            color = ChatColor.RED;
+            symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "3" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
+        } else if (kills == 104) { //104킬
+            color = ChatColor.RED;
+            symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "4" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
+        } else if (kills == 105) { //105킬
+            color = ChatColor.RED;
+            symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "5" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
+        } else if (kills == 106) { //106킬
+            color = ChatColor.RED;
+            symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "6" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
+        } else if (kills == 107) { //107킬
+            color = ChatColor.RED;
+            symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "7" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
+        } else if (kills == 108) { //108킬
+            color = ChatColor.RED;
+            symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "8" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
+        } else if (kills == 109) { //109킬
+            color = ChatColor.RED;
+            symbol = "[" + ChatColor.GOLD + ChatColor.BOLD.toString() + "1" + ChatColor.YELLOW + ChatColor.BOLD.toString() + "0" + ChatColor.GREEN + ChatColor.BOLD.toString() + "9" + ChatColor.AQUA + ChatColor.BOLD.toString() + "✫" + ChatColor.LIGHT_PURPLE + "]";
 
         } else {
             color = ChatColor.DARK_GRAY;
