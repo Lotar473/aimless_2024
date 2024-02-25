@@ -100,6 +100,8 @@ public class aimlessPrestige implements Listener, CommandExecutor {
                     return false;
                 }
 
+                loadPlayerData();
+
                 String title = getTitleByIndex(titleIndex);
                 if (title == null) {
                     sender.sendMessage(ChatColor.RED + "해당 인덱스에 해당하는 칭호를 찾을 수 없습니다.");
@@ -119,16 +121,14 @@ public class aimlessPrestige implements Listener, CommandExecutor {
 
 
     private void loadPlayerData() {
-        // "kills" 섹션의 하위 섹션을 가져옴
-        ConfigurationSection killsSection = config.getConfigurationSection("kills");
-        if (killsSection != null) {
-            for (String uuidString : killsSection.getKeys(false)) {
+        // "titles" 섹션의 모든 플레이어 칭호를 가져옴
+        ConfigurationSection titlesSection = config.getConfigurationSection("titles");
+        if (titlesSection != null) {
+            for (String uuidString : titlesSection.getKeys(false)) {
                 UUID uuid = UUID.fromString(uuidString);
-                int kills = killsSection.getInt(uuidString);
-                playerKills.put(uuid, kills);
 
-                // 칭호 정보도 로드할 수 있음
-                String title = config.getString("titles." + uuidString);
+                // 플레이어의 칭호 정보를 가져와서 맵에 추가
+                String title = titlesSection.getString(uuidString);
                 if (title != null && !title.isEmpty()) {
                     playerTitles.put(uuid, title);
                 }
