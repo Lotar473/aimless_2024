@@ -24,6 +24,9 @@ repositories {
         url "https://repo.dmulloy2.net/repository/public/"
     }
     maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+    maven {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
@@ -34,7 +37,9 @@ dependencies {
     implementation "junit:junit:4.12"
     implementation "com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT"
     implementation "com.comphenix.protocol:ProtocolLib:4.5.1"
+    implementation "net.kyori:adventure-text-minimessage:4.16.0"
     compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0'
+    compileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
 }
 
 tasks.withType(JavaCompile).configureEach {

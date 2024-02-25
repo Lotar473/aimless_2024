@@ -1,7 +1,6 @@
 package org.enteras.project_lostar;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.CommandExecutor;
@@ -17,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.configuration.file.FileConfiguration;
+import net.md_5.bungee.api.ChatColor;
 
 public class aimlessPrestige implements Listener, CommandExecutor {
     private final Map<UUID, Integer> playerKills = new HashMap<>();
@@ -88,7 +88,7 @@ public class aimlessPrestige implements Listener, CommandExecutor {
                 try {
                     titleIndex = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
-                    sender.sendMessage(ChatColor.RED + "칭호 인덱스는 숫자여야 합니다.");
+                    sender.sendMessage(ChatColor.of("#cab5ff") + "칭호 인덱스는 숫자여야 합니다.");
                     return false;
                 }
 
@@ -158,15 +158,33 @@ public class aimlessPrestige implements Listener, CommandExecutor {
     }
 
     private String getTitleByIndex(int index) {
-        // 여기에 인덱스에 해당하는 칭호를 반환하는 로직을 추가하세요.
         switch (index) {
             case 1:
-                return "[" + ChatColor.RED + ChatColor.BOLD.toString() + "First Blood" + ChatColor.RESET + "]"; // 인덱스 1에 해당하는 칭호
+                return ChatColor.DARK_RED + "[" + ChatColor.RED + ChatColor.BOLD.toString() + "First Blood" + ChatColor.RESET + ChatColor.DARK_RED + "] [" +
+                        ChatColor.of("#FF0000") + "☠" + ChatColor.RESET + "]";
             case 2:
-                return "칭호2"; // 인덱스 2에 해당하는 칭호
-            // 추가적인 칭호들의 처리
+                return "[" + ChatColor.of("#FF0000") + "관리자를 잡은 자" + ChatColor.RESET + "]";
+            case 3:
+                return ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "뉴비" + ChatColor.DARK_GREEN + "]";
+            case 4:
+                return "[" + ChatColor.GREEN + ChatColor.BOLD + "Season 1 Player" + ChatColor.RESET + "]";
+            case 5:
+                return "[" + ChatColor.of("#5c00ff") + ChatColor.BOLD.toString() + "D" + ChatColor.of("#6306ff") + ChatColor.BOLD.toString() + "R" + ChatColor.of("#6b0cff") +
+                        ChatColor.BOLD.toString() + "A" + ChatColor.of("#7212ff") + ChatColor.BOLD.toString() + "G" + ChatColor.of("#7a18ff") + ChatColor.BOLD.toString() + "O" + ChatColor.of("#821eff") +
+                        ChatColor.BOLD.toString() + "N " + ChatColor.of("#8924ff") + ChatColor.BOLD.toString() + "S" + ChatColor.of("#912aff") + ChatColor.BOLD.toString() + "L" + ChatColor.of("#9930ff") +
+                        ChatColor.BOLD.toString() + "A" + ChatColor.of("#a036ff") + ChatColor.BOLD.toString() + "Y" + ChatColor.of("#a83cff") + ChatColor.BOLD.toString() + "E" + ChatColor.of("#b042ff") + ChatColor.BOLD.toString() + "R" + ChatColor.RESET + "] [" + ChatColor.DARK_PURPLE + "☬" + ChatColor.RESET + "]";
+            case 6:
+                return "";
+            case 7:
+                return "";
+            case 8:
+                return "";
+            case 9:
+                return "";
+            case 10:
+                return "";
             default:
-                return null; // 인덱스에 해당하는 칭호가 없는 경우
+                return null;
         }
     }
 

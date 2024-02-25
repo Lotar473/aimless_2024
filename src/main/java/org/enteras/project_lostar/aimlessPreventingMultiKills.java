@@ -46,15 +46,14 @@ public class aimlessPreventingMultiKills implements Listener {
                 // 메시지 생성
                 String timeMessage = String.format(ChatColor.RED + "%d분 %d초" + ChatColor.WHITE + "동안 무적입니다!", minutes, seconds);
                 attacker.sendMessage(ChatColor.BOLD.toString() + ChatColor.RED + "연속 킬 방지! " + ChatColor.RESET + "이 플레이어는 " + timeMessage);
-
-            }
-            if (invulnerablePlayers.containsKey(attacker.getUniqueId())) {
-                // If the attacker is invulnerable, remove their invulnerability
-                removeInvulnerability(attacker);
-                attacker.sendMessage(ChatColor.RED + "무적 상태에서 다른 플레이어를 공격하여 무적이 해제되었습니다!");
+            } else if (invulnerablePlayers.containsKey(attacker.getUniqueId())) {
+                // 만약 공격자가 무적인 경우 공격 취소
+                event.setCancelled(true);
+                attacker.sendMessage(ChatColor.RED + "무적 상태에서 다른 플레이어를 공격할 수 없습니다!");
             }
         }
     }
+
 
     private void giveInvulnerability(Player player) {
         invulnerablePlayers.put(player.getUniqueId(), System.currentTimeMillis() + invulnerableDuration);
