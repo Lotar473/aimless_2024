@@ -49,13 +49,13 @@ commands:
     permission: LostaR.command.permission
   emote:
     description: '/emote'
-    permission: LostaR.command.permission.
+    permission: ''
   emotelist:
     description: '/emotelist'
-    permission: LostaR.command.permission.
+    permission: ''
   aimlesstitle:
     description: '/aimlesstitle'
-    permission: LostaR.command.permission.
+    permission: LostaR.command.permission
   randomspawn:
     description: '/randomspawn'
-    permission: LostaR.command.permission.
+    permission: LostaR.command.permission
